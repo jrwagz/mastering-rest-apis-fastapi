@@ -1,13 +1,22 @@
 from fastapi import FastAPI
 
+from socialapi.models.post import UserPost, UserPostIn
+
 app = FastAPI()
 
 
-@app.get("/")
-async def root():
-    """Root API response
+post_table = {}
 
-    Returns:
-        simple dictionary hello world
-    """
-    return {"message": "Hello World"}
+
+@app.post("/post")
+async def create_post(post: UserPostIn) -> UserPost:
+    data = post.model_dump()
+    last_record_id = len(post_table)
+    new_post = UserPost(**data, id=last_record_id)
+    post_table[last_record_id] = new_post
+    return new_post
+
+
+@app.get("/post")
+async def list_posts() -> list[UserPost]:
+    return list(post_table.values())
