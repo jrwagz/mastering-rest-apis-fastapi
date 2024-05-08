@@ -1,8 +1,9 @@
 
+.PHONY: .venv
 .venv:
 	uv venv --python python3.11 .venv
 	. .venv/bin/activate && \
-		uv pip install -r requirements.txt
+		uv pip install -r requirements.txt -r requirements-dev.txt
 
 .PHONY: run
 run:
