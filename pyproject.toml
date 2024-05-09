@@ -11,6 +11,7 @@ addopts = [
     "-ra",
     "--strict-markers",
     "--strict-config",
+    "-W ignore::DeprecationWarning",
 ]
 xfail_strict = 1
 testpaths = [
