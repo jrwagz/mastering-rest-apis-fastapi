@@ -3,3 +3,4 @@ black
 isort
 pytest
 httpx
+asgi_lifespan

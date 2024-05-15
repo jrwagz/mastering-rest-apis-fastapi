@@ -1,6 +1,6 @@
-from typing import AsyncGenerator, Generator
+from typing import AsyncGenerator
 
-from fastapi.testclient import TestClient
+from asgi_lifespan import LifespanManager
 from httpx import AsyncClient
 import pytest
 
@@ -13,11 +13,6 @@ def anyio_backend():
     return "asyncio"
 
 
-@pytest.fixture()
-def client() -> Generator:
-    yield TestClient(app)
-
-
 @pytest.fixture(autouse=True)
 async def db() -> AsyncGenerator:
     post_table.clear()
@@ -26,6 +21,7 @@ async def db() -> AsyncGenerator:
 
 
 @pytest.fixture()
-async def async_client(client) -> AsyncGenerator:
-    async with AsyncClient(app=app, base_url=client.base_url) as ac:
-        yield ac
+async def async_client() -> AsyncGenerator:
+    async with LifespanManager(app) as manager:
+        async with AsyncClient(app=manager.app, base_url="http://testserver") as ac:
+            yield ac
