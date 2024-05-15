@@ -22,6 +22,10 @@ def configure_logging() -> None:
                 }
             },
             "loggers": {
+                "uvicorn": {
+                    "handlers": ["default"],
+                    "level": "INFO",
+                },
                 "socialapi": {
                     "handlers": ["default"],
                     "level": "DEBUG",
